@@ -44,31 +44,31 @@ void setup(void){
   server.on("/LEDoff", HTTP_POST, handleLEDoff); //mesmo de cima
   server.onNotFound(handleNotFound);        // para qualquer outra pagina que nao ta especificado, erro 404
 
-  server.begin();                           // Actually start the server
+  server.begin();                           // inicia o server
   Serial.println("HTTP server started");
 }
 
 void loop(void){
-  server.handleClient();                    // Listen for HTTP requests from clients
+  server.handleClient();                    // escuta os requests
 }
 
-void handleRoot() {                         // When URI / is requested, send a web page with a button to toggle the LED
+void handleRoot() {                         // quando http://esp8266.local for acessado
   String html ="<!DOCTYPE html> <html> <head> <style> .button { background-color: #4CAF50; border: none; color: white; padding: 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 12px; } </style> </head> <body> <h1 style=\"text-align: center;\"><font face=\"helvetica\">Minicurso IoT NodeMCU</font></h1> <h2 style=\"text-align: center;\"><strong><font face=\"helvetica\" color=\"green\">LED da placa</font></strong></h2> <form action=\"/LEDon\" method=\"post\"> <center> <button class=\"button\">ON</button></br> <button class=\"button\" formaction=\"/LEDoff\">OFF</button> </center> </form> </body> </html>";
   server.send(200, "text/html", html);
 }
 
-void handleLEDon() {                          // If a POST request is made to URI /LED
+void handleLEDon() {                          // acessado quando o botao é clicado
   digitalWrite(LED_BUILTIN,LOW);      // Change the state of the LED
-  server.sendHeader("Location","/");        // Add a header to respond with a new location for the browser to go to the home page again
-  server.send(303);                         // Send it back to the browser with an HTTP status 303 (See Other) to redirect
+  server.sendHeader("Location","/");        // retorna a pagina inicial
+  server.send(303);                         
 }
 
-void handleLEDoff() {                          // If a POST request is made to URI /LED
-  digitalWrite(LED_BUILTIN,HIGH);      // Change the state of the LED
-  server.sendHeader("Location","/");        // Add a header to respond with a new location for the browser to go to the home page again
-  server.send(303);                         // Send it back to the browser with an HTTP status 303 (See Other) to redirect
+void handleLEDoff() {                         
+  digitalWrite(LED_BUILTIN,HIGH);     
+  server.sendHeader("Location","/");        
+  server.send(303);                    
 }
 
 void handleNotFound(){
-  server.send(404, "text/plain", "404: Not found"); // Send HTTP status 404 (Not Found) when there's no handler for the URI in the request
+  server.send(404, "text/plain", "404: Not found"); // msg de erro
 }
