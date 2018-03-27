@@ -119,4 +119,8 @@ BLYNK_CONNECTED() {
 {
   Blynk.run(); // Initiates Blynk
 }
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> origin/master
